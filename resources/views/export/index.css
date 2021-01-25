@@ -1,0 +1,156 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+h2,
+p {
+  font-family: inherit;
+}
+
+.frame {
+  width: 620px;
+  padding: 13px;
+  margin: auto;
+}
+
+.frame--center {
+  margin: 25px;
+}
+
+.frame__border {
+  display: inline-block;
+  height: 100%;
+  border: 2px solid #007e7f;
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+}
+
+.header__title {
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  margin: 20px auto;
+  height: 50px;
+}
+
+/* two-box */
+.two-box {
+  width: 100%;
+  position: absolute;
+  bottom: -9.0909090909px;
+}
+
+.two-box .box {
+  width: 10px;
+  height: 15px;
+  border: 3px solid #007e7f;
+}
+
+/* position box for header */
+.header__title .two-box:nth-child(1) {
+  top: -9.0909090909px;
+}
+
+.header__title .two-box:nth-child(2) {
+  bottom: -9.0909090909px;
+}
+
+.header__title .two-box .box:nth-child(1),
+.header__title .two-box .box:nth-child(3) {
+  margin-left: -10px;
+}
+
+.header__title .two-box .box:nth-child(2),
+.header__title .two-box .box:nth-child(4) {
+  margin-right: -10px;
+}
+
+/* HEADER-CONTENT */
+.header__content p:before {
+  content: open-quote;
+}
+
+.header__content p:after {
+  content: close-quote;
+}
+
+/* CONTENT */
+.content {
+  height: 100%;
+}
+
+/* option1 */
+.content.option1,
+.content.option2,
+.content.option3,
+.content.option4 {
+  padding: 0 10px;
+}
+
+.content .row {
+  float: left;
+  overflow: hidden;
+  height: 100%;
+}
+
+.content .row:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.content .row .col p {
+  padding-right: 20px;
+}
+
+.content .row .col {
+  float: left;
+  max-width: 50%;
+}
+
+.bg-gray {
+  background-image: url("./image/background.png");
+  background-size: 100%;
+}
+
+.line-box .two-box .box:nth-child(1) {
+  float: left;
+  margin-left: -10px;
+}
+
+.line-box .two-box .box:nth-child(2) {
+  float: right;
+  margin-right: -10px;
+}
+
+.line-box {
+  float: left;
+  position: relative;
+  width: 150px;
+  margin: 5px auto 10px;
+  height: 15px;
+  border-bottom: 3px solid #007e7f;
+}
+
+svg {
+  stroke: #007e7f;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.content.option1 .row:last-child {
+  width: 100%;
+  margin: 0 0 10px;
+  border: 3px solid #007e7f;
+  position: relative;
+  outline: none;
+}
+
+@page {
+  size: a4;
+}

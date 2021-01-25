@@ -1,0 +1,163 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Auth;
+use App\User;
+use App\Classes\TypeNumber;
+// use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use PDFMerger;
+use VerumConsilium\Browsershot\Facades\PDF;
+class DashboardController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view('user.infor',['user'=>User::find(Auth::user()->id)]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+
+        return view('user.create',['user'=>Auth::user(),'users'=>User::where('account_of',Auth::user()->id)->get()]);
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $r)
+    {
+        $user = User::where('name',$r->user)->first();
+         $currenUser = User::find(Auth::user()->id);
+        if(!$user){
+        	$coin=40;
+            if ($r->level==5) {
+                $coin=600;
+            }
+            if ($currenUser->coin-$coin<0) {
+           		return "Hết tiền rồi";
+           	}
+
+            
+            $d = new User;
+            $d->coin=$coin;
+            $d->name= $r->user;
+            $d->password= bcrypt($r->pass);
+            $d->level= $r->level;
+            $d->role=1;
+            $d->account_of=Auth::user()->id;
+            $d->save();
+
+            $currenUser->coin=$currenUser->coin-$coin;
+            $currenUser->save();
+            return back();
+        }else{
+            return "k";
+        }
+    }
+
+    public function export()
+    {
+
+    	$path = storage_path() . "/json/life.php";
+    	include($path);
+    	print_r($arr[5]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $r, $id)
+    {
+    	// return $r->birth;
+        $d = User::find(Auth::user()->id);
+        $d->fullname= $r->fullname;
+        $d->birth= $r->birth;
+        $d->phone= $r->phone;
+        $d->save();
+
+        $num = new TypeNumber($r->fullname);
+
+        return $num->getInner();
+
+        return back();
+    }
+    public function test_export(Request $r)
+    {
+    	$path = storage_path() . "/json/life.php";
+    	include($path);
+    	
+    	$d = User::find(Auth::user()->id);
+    	$num = new TypeNumber($d->fullname);
+
+         $merger = \PDFMerger::init();
+         for ($i=1; $i <3 ; $i++) { 
+             $pdf = PDF::loadView('export.f'.$i, ['data'=>$arr[''.$num->getInner()]])->noSandbox();
+             $pdf->save(base_path('/public/pdf/f'.$i.'.pdf'));
+         }
+         for ($i=1; $i <3 ; $i++) { 
+             $merger->addPathToPDF(base_path('/public/pdf/f'.$i.'.pdf'), 'all', 'P');
+         }
+         $merger->merge();
+         // $merger->save(base_path('/public/pdf/done.pdf'));
+         $merger->setFileName('sohocera.pdf');
+         $merger->download();
+         return back();
+        
+    }
+    public function video()
+    {
+        return view('user.video');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}
